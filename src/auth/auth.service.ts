@@ -15,9 +15,7 @@ export class AuthService {
 
 constructor(
         private usersRepository: UsersRepository,
-    )
-    {
-    }
+    ){}
 
 
   async GetAllUser():Promise<User[]>{
@@ -32,9 +30,9 @@ constructor(
     return found
   }
   
-  CreateUser(createUserDto:CreateUserDto):Promise<User>{
+  async CreateUser(createUserDto:CreateUserDto):Promise<User>{
    
-   const user= this.usersRepository.create(createUserDto)
-   return this.usersRepository.save(user)
+   return this.usersRepository.signUp(createUserDto)
+   
   }
 }
