@@ -5,7 +5,8 @@ import { User } from './entity/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersRepository } from './auth.repository';
 import { AuthCredencialDto } from './dto/authCredential.dto';
-
+import { JwtService } from '@nestjs/jwt';
+import { JwtPayLoad } from './jwtPayLoad.interface';
 
 
 @Injectable()
@@ -15,6 +16,7 @@ export class AuthService {
 
 constructor(
         private usersRepository: UsersRepository,
+        private jwtService: JwtService,
     ){}
 
 
@@ -35,11 +37,15 @@ constructor(
    
   }
   
-  async SignIn(authCredencialDto :AuthCredencialDto){
+  async SignIn(authCredencialDto :AuthCredencialDto):Promise<{access_token:string}>{
   const username=await this.usersRepository.SignIn(authCredencialDto)
   if (!username){
     throw new UnauthorizedException("Credentials Invalid")
   }
+  const payload:JwtPayLoad={username};
+  const access_token=await this.jwtService.sign(payload);
+  return {access_token}
+        
    
   }
 }
