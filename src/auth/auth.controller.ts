@@ -2,6 +2,8 @@ import { Controller,Get,Post,Put,Patch,Body,Param,UsePipes,ValidationPipe } from
 import { AuthService} from './auth.service';
 import { User } from './entity/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
+import { AuthCredencialDto } from './dto/authCredential.dto';
+
 
 
 
@@ -21,10 +23,17 @@ export class AuthController {
   GetUserById(@Param("id")id:string):Promise<User>{
     return this.authService.GetUserById(Number(id))
   }
-  @Post()
+  
+  @Post("signup")
   @UsePipes(new ValidationPipe())
-  CreateUser(@Body()createUserDto:CreateUserDto):Promise<User>{
-    return this.authService.CreateUser(createUserDto)
+  SignUp(@Body()createUserDto:CreateUserDto):Promise<User>{
+    return this.authService.SignUp(createUserDto)
+  }
+  
+  @Post("signin")
+  @UsePipes(new ValidationPipe())
+  SignIn(@Body()authCredencialDto:AuthCredencialDto){
+    return this.authService.SignIn(authCredencialDto)
   }
   
 }
